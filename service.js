@@ -81,10 +81,9 @@ module.exports = (app) => {
           console.log("the message is of text type");
           handleMessage(senderPsid, webhookEvent.message);
         } else if (webhookEvent.postback) {
-          handleMessage(senderPsid, webhookEvent.postback.payload);
+          handleMessage(senderPsid, webhookEvent.postback.payload, "postback");
         }
       });
-
       // Returns a '200 OK' response to all requests
       console.log("succeded");
       res.status(200).send("EVENT_RECEIVED");
@@ -309,52 +308,67 @@ module.exports = (app) => {
   }
 
   // Handles messages events
-  function handleMessage(senderPsid, receivedMessage) {
+  function handleMessage(senderPsid, receivedMessage, msgType) {
     let response;
-    // Checks if the message contains text
-    if (receivedMessage.text) {
-      // Create the payload for a basic text message, which
-      // will be added to the body of your request to the Send API
-      receivedMessage.text = convertArabicNumbersToEnglish(
-        receivedMessage.text
-      );
-      const warningMSG = checkIfCreditCardNumberIsExisted(receivedMessage.text);
+    if (msgType === "postback") {
+      // webHookevent.postback.payload
+      receivedMessage = convertArabicNumbersToEnglish(receivedMessage);
+      const warningMSG = checkIfCreditCardNumberIsExisted(receivedMessage);
       if (warningMSG) {
         callSendAPI(warningMSG, senderPsid, true);
         return;
       }
       response = {
-        text: ` '${receivedMessage.text}'`,
+        text: ` '${receivedMessage}'`,
       };
-      // console.log("the response  is " + JSON.stringify(response));
+    } else {
+      // Checks if the message contains text
+      if (receivedMessage.text) {
+        // Create the payload for a basic text message, which
+        // will be added to the body of your request to the Send API
+        receivedMessage.text = convertArabicNumbersToEnglish(
+          receivedMessage.text
+        );
+        const warningMSG = checkIfCreditCardNumberIsExisted(
+          receivedMessage.text
+        );
+        if (warningMSG) {
+          callSendAPI(warningMSG, senderPsid, true);
+          return;
+        }
+        response = {
+          text: ` '${receivedMessage.text}'`,
+        };
+        // console.log("the response  is " + JSON.stringify(response));
 
-      // sendDataToODAWebHookLayer(senderPsid, response);
-    } else if (receivedMessage.attachments) {
-      // Get the URL of the message attachment
-      // let attachmentUrl = receivedMessage.attachments[0].payload.url;
-      // response = {
-      //   attachment: {
-      //     type: "template",
-      //     payload: {
-      //       template_type: "generic",
-      //       elements: [
-      //         {
-      //           title: "Are you a retail or a corporate customer?",
-      //           subtitle: null,
-      //           image_url: null,
-      //           buttons: [
-      //             { type: "postback", title: "1 Retail", payload: "Retail" },
-      //             {
-      //               type: "postback",
-      //               title: "2 Corporate",
-      //               payload: "Corporate",
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   },
-      // };
+        // sendDataToODAWebHookLayer(senderPsid, response);
+      } else if (receivedMessage.attachments) {
+        // Get the URL of the message attachment
+        // let attachmentUrl = receivedMessage.attachments[0].payload.url;
+        // response = {
+        //   attachment: {
+        //     type: "template",
+        //     payload: {
+        //       template_type: "generic",
+        //       elements: [
+        //         {
+        //           title: "Are you a retail or a corporate customer?",
+        //           subtitle: null,
+        //           image_url: null,
+        //           buttons: [
+        //             { type: "postback", title: "1 Retail", payload: "Retail" },
+        //             {
+        //               type: "postback",
+        //               title: "2 Corporate",
+        //               payload: "Corporate",
+        //             },
+        //           ],
+        //         },
+        //       ],
+        //     },
+        //   },
+        // };
+      }
     }
 
     // Send the response message
