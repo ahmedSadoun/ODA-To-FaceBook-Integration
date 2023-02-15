@@ -26,8 +26,8 @@ module.exports = (app) => {
   // add webhook integration
   const webhook = new WebhookClient({
     channel: {
-      url: "https://oda-c85f7b3fe4a54b6eb63c15cb09f7d986-da2.data.digitalassistant.oci.oraclecloud.com/connectors/v2/listeners/webhook/channels/bb3294e6-71fc-49c7-b69f-78d3d29ad7cf",
-      secret: "47mTUBT3vnxY4l351gR9wE51I3y3Cpya",
+      url: "https://oda-ea7ee6ca09024e5fa0656e7ca7c8dee3-da2.data.digitalassistant.oci.oraclecloud.com/connectors/v2/listeners/webhook/channels/f3a30149-22e2-4bbd-8768-8b6a27b74ee3",
+      secret: "mbMWM3BqqhX0UCzaNmwHLeVgvrMr3qaq",
     },
   });
 
@@ -389,7 +389,7 @@ module.exports = (app) => {
     let Button = {};
     Button.type = action.type;
     Button.title = action.label;
-    Button.payload = action.label.substring(2, action.label.length);
+    Button.payload = action.label; //.substring(2, action.label.length);
     // console.log("the button is " + JSON.stringify(Button));
     return Button;
   }
