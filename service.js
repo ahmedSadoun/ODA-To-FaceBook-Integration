@@ -204,8 +204,7 @@ module.exports = (app) => {
     let Default_Action = { type: "web_url", url: "", webview_height_ratio: "" };
     if (!cards) {
       console.log(
-        "********************************************* NO CARDS JUST ACTIONS ******************************************",
-        "the actions are " + JSON.stringify(actions)
+        "********************************************* NO CARDS JUST ACTIONS ******************************************"
       );
       NoCardsElement.title = messagePayload.text;
       actions.forEach((action) => {
@@ -290,7 +289,7 @@ module.exports = (app) => {
         message: response,
       };
     }
-    // console.log("the request is : " + JSON.stringify(requestBody));
+    console.log("the request is : " + JSON.stringify(requestBody));
     // Send the HTTP request to the Messenger Platform
     request(
       {
