@@ -81,6 +81,10 @@ module.exports = (app) => {
           console.log("the message is of text type");
           handleMessage(senderPsid, webhookEvent.message);
         } else if (webhookEvent.postback) {
+          console.log(
+            "webhookEvent.postback.payload",
+            webhookEvent.postback.payload
+          );
           handleMessage(senderPsid, webhookEvent.postback.payload, "postback");
         }
       });
