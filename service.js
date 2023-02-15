@@ -148,7 +148,11 @@ module.exports = (app) => {
         // console.log("the response is " + response);
         //res.send("ok");
       },
-      (e) => res.status(400).end(e.message)
+      (e) => {
+        console.log(
+          "error when trying to send a message to oda \n" + e.message
+        );
+      }
     );
   }
 
