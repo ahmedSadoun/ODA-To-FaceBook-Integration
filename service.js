@@ -64,7 +64,7 @@ module.exports = (app) => {
     // Checks if this is an event from a page subscription
     if (body.object === "page") {
       // Iterates over each entry - there may be multiple if batched
-      // console.log("the request body is : " + JSON.stringify(body));
+      console.log("the request body is : " + JSON.stringify(body));
       body.entry.forEach(function (entry) {
         // Gets the body of the webhook event
         let webhookEvent = entry.messaging[0];
