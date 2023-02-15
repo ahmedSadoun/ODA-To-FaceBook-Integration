@@ -56,7 +56,7 @@ module.exports = (app) => {
   app.get("/", (req, res) => {
     res.send("running");
   });
-  app.post("/webhook", (req, res) => {
+  app.post("/fromFacebook", (req, res) => {
     let body = req.body;
     //  let challenge = req.query["hub.challenge"];
     // console.log(body);
@@ -95,7 +95,7 @@ module.exports = (app) => {
   });
 
   // // Adds support for GET requests to our webhook
-  app.get("/webhook", (req, res) => {
+  app.get("/fromFacebook", (req, res) => {
     // Your verify token. Should be a random string.
     const VERIFY_TOKEN = process.env.VERIFY_TOKEN
       ? process.env.VERIFY_TOKEN
@@ -120,7 +120,7 @@ module.exports = (app) => {
       }
     }
   });
-  app.post("/bot/message", webhook.receiver());
+  app.post("/bot/toFacebook", webhook.receiver());
 
   function sendMessageToODA(senderPsid, message) {
     // let { response } = message;
