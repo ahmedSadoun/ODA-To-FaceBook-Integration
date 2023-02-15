@@ -202,12 +202,13 @@ module.exports = (app) => {
       return singleMSG;
     }
     // console.log(JSON.stringify(messagePayload));
+    let quickReplies = [];
     let Button = { type: "", title: "", payload: "" };
     let Element = { title: "", subtitle: "", image_url: "", buttons: [] };
     let NoCardsElement = { title: "", subtitle: "", buttons: [] };
     let Payload = { template_type: "generic", elements: [] };
     let AttachmentBody = { type: "template", payload: {} };
-    let Attachment = { attachment: {} };
+    let Attachment = { attachment: {}, quickReplies: [] };
     let Default_Action = { type: "web_url", url: "", webview_height_ratio: "" };
     if (!cards) {
       console.log(
@@ -232,6 +233,7 @@ module.exports = (app) => {
           globalAction.push(prepairActionToFacebookButtonFormat(action));
         });
       }
+      quickReplies = genQuickReply(globalAction);
       // console.log(
       //   "********************************************* GLOBAL ACTIONS ******************************************"
       // );
@@ -247,9 +249,6 @@ module.exports = (app) => {
           Element.buttons.push(prepairActionToFacebookButtonFormat(action));
           // console.log;
         });
-        globalAction.forEach((element) => {
-          Element.buttons.push(element);
-        });
         Payload.elements.push(Element);
       });
       console.log(
@@ -260,6 +259,7 @@ module.exports = (app) => {
 
     AttachmentBody.payload = Payload;
     Attachment.attachment = AttachmentBody;
+    Attachment.quickReplies = quickReplies;
     // console.log(
     //   "********************************************* ATTACHMENTS ******************************************"
     // );
@@ -398,3 +398,18 @@ module.exports = (app) => {
     return Button;
   }
 };
+function genQuickReply(quickReplies) {
+  let response = {
+    quick_replies: [],
+  };
+
+  for (let quickReply of quickReplies) {
+    response["quick_replies"].push({
+      content_type: "text",
+      title: quickReply["label"],
+      payload: quickReply["label"],
+    });
+  }
+
+  return response;
+}
